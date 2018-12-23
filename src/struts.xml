@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <include file="struts-default.xml"/>
+    <!--指定web应用的默认编码集，相当于调用HttpServletRequest的setCharacterEncoding的方法 -->
+    <constant name="struts.i18n.encoding" value="UTF-8"/>
+    <constant name="struts.action.extension" value="do" />
+    <!--i18n-->
+    <constant name="struts.custom.i18n.resources" value="i18n/message"/>
+    <!-- 开发模式下使用，这样可以打印更详细的错误信息 -->
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.multipart.saveDir" value="/opt/temp/upload"/>
+
+
+    <package name="default" namespace="/default" extends="struts-default">
+        <global-results>
+            <result name="global.index">/index.jsp</result>
+            <result name="global.error">/restserver.jsp</result>
+        </global-results>
+
+        <global-exception-mappings>
+            <exception-mapping result="global.error" exception="java.lang.Exception" />
+        </global-exception-mappings>
+    </package>
+
+    <package name="transaction" extends="struts-default" namespace="/transaction">
+        <action name="/*" class="com.pwk.action.TransactionAction" method="{1}"/>
+    </package>
+    <package name="image" extends="struts-default" namespace="/image">
+        <action name="/*" class="com.pwk.action.ImageAction" method="{1}"/>
+    </package>
+    <package name="item" extends="struts-default" namespace="/item">
+        <action name="/*" class="com.pwk.action.ItemAction" method="{1}"/>
+    </package>
+    <package name="admin" extends="struts-default" namespace="/admin">
+        <action name="/*" class="com.pwk.action.AdminAction" method="{1}"/>
+    </package>
+
+</struts>

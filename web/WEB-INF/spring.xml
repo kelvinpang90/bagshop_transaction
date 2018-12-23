@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/data/mongo
+          http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <context:annotation-config/>
+
+    <mongo:mongo host="127.0.0.1" port="27017"/>
+    <mongo:db-factory dbname="bagshop_transaction" id="mongoDbFactory"/>
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongoDbFactory"/>
+    </bean>
+
+    <!-- 事务管理器配置,单数据源事务 -->
+    <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <!-- 使用annotation定义事务 -->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
+    <!--hibernate-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/bagshop?useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="19900108pwk"/>
+        <property name="initialSize" value="1"/>
+        <property name="maxActive" value="500"/>
+        <property name="maxIdle" value="2"/>
+        <property name="minIdle" value="1"/>
+        <property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+        <property name="minEvictableIdleTimeMillis" value="18000000"/>
+        <property name="validationQuery" value="select 1"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="true"/>
+        <!-- 是否对已备语句进行池管理（布尔值），是否对PreparedStatement进行缓存 -->
+        <property name="poolPreparedStatements" value="true" />
+    </bean>
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref bean="dataSource" />
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">
+                    org.hibernate.dialect.MySQLDialect
+                </prop>
+                <!--<prop key="hibernate.show_sql">true</prop>-->
+            </props>
+        </property>
+        <property name="mappingResources">
+            <list>
+                <value>com/pwk/entity/Brand.hbm.xml</value>
+                <value>com/pwk/entity/Product.hbm.xml</value>
+                <value>com/pwk/entity/Admin.hbm.xml</value>
+                <value>com/pwk/entity/HotSale.hbm.xml</value>
+                <value>com/pwk/entity/IndexProduct.hbm.xml</value>
+                <value>com/pwk/entity/FAQ.hbm.xml</value>
+                <value>com/pwk/entity/User.hbm.xml</value>
+                <value>com/pwk/entity/ShoppingCart.hbm.xml</value>
+                <value>com/pwk/entity/AboutUs.hbm.xml</value>
+                <value>com/pwk/entity/Order.hbm.xml</value>
+                <value>com/pwk/entity/OrderItem.hbm.xml</value>
+                <value>com/pwk/entity/Color.hbm.xml</value>
+                <value>com/pwk/entity/IndexInfo.hbm.xml</value>
+                <value>com/pwk/entity/IndexPic.hbm.xml</value>
+                <value>com/pwk/entity/Video.hbm.xml</value>
+                <value>com/pwk/entity/Country.hbm.xml</value>
+                <value>com/pwk/entity/State.hbm.xml</value>
+                <value>com/pwk/entity/PaymentDetail.hbm.xml</value>
+                <value>com/pwk/entity/Image.hbm.xml</value>
+                <value>com/pwk/entity/TransactionHistory.hbm.xml</value>
+                <value>com/pwk/entity/PV_Detail.hbm.xml</value>
+                <value>com/pwk/entity/PV.hbm.xml</value>
+                <value>com/pwk/entity/Login_log.hbm.xml</value>
+                <value>com/pwk/entity/Admin_log.hbm.xml</value>
+                <value>com/pwk/entity/Attribute.hbm.xml</value>
+                <value>com/pwk/entity/Parameter.hbm.xml</value>
+                <value>com/pwk/entity/Category.hbm.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg ref="dataSource"></constructor-arg>
+    </bean>
+
+    <bean id="transactionService" class="com.pwk.service.impl.TransactionServiceImpl"/>
+    <bean id="brandService" class="com.pwk.service.impl.BrandServiceImpl"/>
+    <bean id="imageService" class="com.pwk.service.impl.ImageServiceImpl"/>
+    <bean id="itemService" class="com.pwk.service.impl.ItemServiceImpl"/>
+    <bean id="adminService" class="com.pwk.service.impl.AdminServiceImpl"/>
+
+    <bean id="engine" class="com.pwk.tools.Engine">
+        <property name="transactionService" ref="transactionService"/>
+        <property name="brandService" ref="brandService"/>
+        <property name="itemService" ref="itemService"/>
+    </bean>
+</beans>

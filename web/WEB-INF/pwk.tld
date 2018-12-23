@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+    <description>我的tld</description>
+    <display-name>mytld</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>pwk</short-name>
+    <uri>http://www.pwk.com</uri>
+
+    <!--transaction-->
+    <function>
+        <name>getTransactionById</name>
+        <function-class>com.pwk.taglib.TransactionFunction</function-class>
+        <function-signature>
+            com.pwk.entity.Transaction getById(java.lang.String)
+        </function-signature>
+    </function>
+
+    <function>
+        <name>getByKeywordAndDate</name>
+        <function-class>com.pwk.taglib.TransactionFunction</function-class>
+        <function-signature>
+            java.util.List getByKeywordAndDate(java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer)
+        </function-signature>
+    </function>
+
+    <function>
+        <name>getTransactionByDate</name>
+        <function-class>com.pwk.taglib.TransactionFunction</function-class>
+        <function-signature>
+            java.util.List getByDate(java.lang.String,java.lang.Integer,java.lang.Integer)
+        </function-signature>
+    </function>
+
+    <function>
+        <name>getRevenue</name>
+        <function-class>com.pwk.taglib.TransactionFunction</function-class>
+        <function-signature>
+            java.lang.Float getRevenue(java.lang.String)
+        </function-signature>
+    </function>
+
+    <!--brand-->
+    <function>
+        <name>getAllBrands</name>
+        <function-class>com.pwk.taglib.BrandFunction</function-class>
+        <function-signature>
+            java.util.List getAllBrands()
+        </function-signature>
+    </function>
+
+    <!--pic-->
+    <function>
+        <name>getPicDomain</name>
+        <function-class>com.pwk.taglib.UrlFunction</function-class>
+        <function-signature>
+            java.lang.String getPicDomain()
+        </function-signature>
+    </function>
+</taglib>
